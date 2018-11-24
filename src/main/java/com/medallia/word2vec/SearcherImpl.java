@@ -72,7 +72,8 @@ class SearcherImpl implements Searcher {
    * @return Vector for the given word
    * @throws UnknownWordException If word is not in the model's vocabulary
    */
-  private double[] getVector(String word) throws UnknownWordException {
+
+  @Override public double[] getVector(String word) throws UnknownWordException {
 	final double[] result = getVectorOrNull(word);
 	if(result == null)
 	  throw new UnknownWordException(word);

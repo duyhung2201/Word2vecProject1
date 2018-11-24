@@ -3,6 +3,7 @@ package com.medallia.word2vec.huffman;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultiset;
+import com.google.common.collect.Multiset;
 import com.google.common.collect.Multiset.Entry;
 import com.medallia.word2vec.Word2VecTrainerBuilder.TrainingProgressListener;
 import com.medallia.word2vec.Word2VecTrainerBuilder.TrainingProgressListener.Stage;

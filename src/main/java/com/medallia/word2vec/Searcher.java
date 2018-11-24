@@ -31,7 +31,8 @@ public interface Searcher {
 
 	/** @return cosine similarity between two words. */
 	double cosineDistance(String s1, String s2) throws UnknownWordException;
-	
+
+	double[] getVector(String word) throws UnknownWordException;
 	/** Represents a match to a search word */
 	public interface Match {
 		/** @return Matching word */

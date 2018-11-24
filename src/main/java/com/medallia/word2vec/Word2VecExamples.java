@@ -32,9 +32,9 @@ public class Word2VecExamples {
 	private static final Log LOG = AutoLog.getLog();
 	
 	/** Runs the example */
-	public static void main(String[] args) throws IOException, TException, UnknownWordException, InterruptedException {
-		demoWord();
-//		skipGram();
+	public static void main(String[]args) throws IOException, TException, UnknownWordException, InterruptedException {
+//		demoWord();
+		skipGram();
 	}
 	
 	/** 
@@ -97,7 +97,7 @@ public class Word2VecExamples {
 	/** Example using Skip-Gram model */
 	public static void skipGram() throws IOException, TException, InterruptedException, UnknownWordException {
 //		List<String> read = Common.readToList(new File("sents.cleaned.word2vec.txt"));
-		List<String> read = Common.readToList(new File("text8"));
+		List<String> read = Common.readToList(new File("text8_test"));
 		List<List<String>> partitioned = Lists.transform(read, new Function<String, List<String>>() {
 			@Override
 			public List<String> apply(String input) {
@@ -126,7 +126,7 @@ public class Word2VecExamples {
 			FileUtils.writeStringToFile(new File("300layer.20threads.5iter.model"), ThriftUtils.serializeJson(model.toThrift()));
 		}
 		
-//		interact(model.forSearch());
+		interact(model.forSearch());
 	}
 	
 	private static void interact(Searcher searcher) throws IOException, UnknownWordException {
@@ -141,9 +141,9 @@ public class Word2VecExamples {
                 try {
 //                    List<Match> matches = searcher.getMatches(word, 20);
 //                    System.out.println(Strings.joinObjects("\n", matches));
-//					List<Match> test = searcher.cosineDistance()
-					System.out.println(searcher.cosineDistance(word1,word2));
+//					System.out.println(searcher.cosineDistance(word1,word2));
 					System.out.println(searcher.getRawVector(word1));
+					System.out.println(searcher.getVector(word1));
                 } catch (Exception e) {
                     System.out.println(e);
                     System.out.println("Nhập lại đi ! 😀");
