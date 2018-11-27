@@ -34,15 +34,16 @@ public class Word2VecExamples {
 	/** Runs the example */
 	public static void main(String[]args) throws IOException, TException, UnknownWordException, InterruptedException {
 //		demoWord();
-		skipGram();
+//		skipGram();
+		loadModel();
 	}
-	
-	/** 
+
+	/**
 	 * Trains a model and allows user to find similar words
 	 * demo-word.sh example from the open source C implementation
 	 */
 	public static void demoWord() throws IOException, TException, InterruptedException, UnknownWordException {
-		File f = new File("text8_test");
+		File f = new File("text8");
 		if (!f.exists())
 	       	       throw new IllegalStateException("Please download and unzip the text8 example from" +
 						   " http://mattmahoney.net/dc/text8.zip");
@@ -72,7 +73,7 @@ public class Word2VecExamples {
 
 		// Writes model to a thrift file
 		try (ProfilingTimer timer = ProfilingTimer.create(LOG, "Writing output to file")) {
-			FileUtils.writeStringToFile(new File("text8_test.model"), ThriftUtils.serializeJson(model.toThrift()));
+			FileUtils.writeStringToFile(new File("text8CBOW.model"), ThriftUtils.serializeJson(model.toThrift()));
 		}
 
 		// Alternatively, you can write the model to a bin file that's compatible with the C
@@ -88,7 +89,7 @@ public class Word2VecExamples {
 	public static void loadModel() throws IOException, TException, UnknownWordException {
 		final Word2VecModel model;
 		try (ProfilingTimer timer = ProfilingTimer.create(LOG, "Loading model")) {
-			String json = Common.readFileToString(new File("text8_test.model"));
+			String json = Common.readFileToString(new File("text8CBOW.model"));
 			model = Word2VecModel.fromThrift(ThriftUtils.deserializeJson(new Word2VecModelThrift(), json));
 		}
 		interact(model.forSearch());
@@ -97,7 +98,7 @@ public class Word2VecExamples {
 	/** Example using Skip-Gram model */
 	public static void skipGram() throws IOException, TException, InterruptedException, UnknownWordException {
 //		List<String> read = Common.readToList(new File("sents.cleaned.word2vec.txt"));
-		List<String> read = Common.readToList(new File("text8_test"));
+		List<String> read = Common.readToList(new File("text8"));
 		List<List<String>> partitioned = Lists.transform(read, new Function<String, List<String>>() {
 			@Override
 			public List<String> apply(String input) {
@@ -123,7 +124,7 @@ public class Word2VecExamples {
 				.train(partitioned);
 		
 		try (ProfilingTimer timer = ProfilingTimer.create(LOG, "Writing output to file")) {
-			FileUtils.writeStringToFile(new File("300layer.20threads.5iter.model"), ThriftUtils.serializeJson(model.toThrift()));
+			FileUtils.writeStringToFile(new File("text8SKIP_GRAM.model"), ThriftUtils.serializeJson(model.toThrift()));
 		}
 		
 		interact(model.forSearch());
@@ -140,15 +141,13 @@ public class Word2VecExamples {
                 String word2 = br.readLine();
                 try {
 //                    List<Match> matches = searcher.getMatches(word, 20);
-//                    System.out.println(Strings.joinObjects("\n", matches));
-//					System.out.println(searcher.cosineDistance(word1,word2));
-					System.out.println(searcher.getRawVector(word1));
-					System.out.println(searcher.getVector(word1));
+ 					System.out.println(searcher.contains(word1));
+					System.out.println(searcher.cosineDistance(word1,word2));
+//					System.out.println(searcher.getVector(word1));
                 } catch (Exception e) {
                     System.out.println(e);
                     System.out.println("Nhập lại đi ! 😀");
                 }
-
             }
 		}
 	}

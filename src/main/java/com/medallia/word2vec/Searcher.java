@@ -19,7 +19,13 @@ public interface Searcher {
 	
 	/** @return Top matches to the given vector */
 	List<Match> getMatches(final double[] vec, int maxNumMatches);
-	
+
+	//tach word va double
+	String[] splitStr(String s);
+
+	//tinh do tg dong giua ques-ans
+	double cosineQuesAns(String ques, String ans) throws UnknownWordException;
+
 	/** Represents the similarity between two words */
 	public interface SemanticDifference {
 		/** @return Top matches to the given word which share this semantic relationship */
@@ -59,4 +65,6 @@ public interface Searcher {
 			super(String.format("Unknown search word '%s'", word));
 		}
 	}
+	public boolean checkValidDouble(String d);
+	public double cosineDouble(String s1, String s2);
 }
