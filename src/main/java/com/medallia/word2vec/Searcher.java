@@ -26,6 +26,10 @@ public interface Searcher {
 	//tinh do tg dong giua ques-ans
 	double cosineQuesAns(String ques, String ans) throws UnknownWordException;
 
+    double cosDisSentences(String s1, String s2) throws UnknownWordException;
+
+	String replaceS(String s);
+
 	/** Represents the similarity between two words */
 	public interface SemanticDifference {
 		/** @return Top matches to the given word which share this semantic relationship */
@@ -67,4 +71,5 @@ public interface Searcher {
 	}
 	public boolean checkValidDouble(String d);
 	public double cosineDouble(String s1, String s2);
+
 }

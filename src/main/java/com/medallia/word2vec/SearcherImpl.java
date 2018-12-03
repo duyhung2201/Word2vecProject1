@@ -185,8 +185,8 @@ class SearcherImpl implements Searcher {
     @Override
     public double cosineQuesAns(String ques, String ans) throws UnknownWordException {
         double sumMax = 0;
-        String[] q = this.splitStr(ques);
-        String[] a = this.splitStr(ans);
+        String[] q = this.splitStr(ques.toLowerCase());
+        String[] a = this.splitStr(ans.toLowerCase());
         int len = a.length;
         for (String aj : a) {
             double max = 0;
@@ -218,5 +218,20 @@ class SearcherImpl implements Searcher {
         }
         return sumMax / len;
     }
+
+    @Override public double cosDisSentences(String s1, String s2) throws UnknownWordException {
+		return (cosineQuesAns(s1,s2)+cosineQuesAns(s2,s1))/2;
+	}
+
+    static String[] regex = {"<br>","<br />","(?i)let's","(?i)\\s*'s\\s+","(?i)\\s*'m\\s+","(?i)\\s*'re\\s+",
+            "(?i)n\\s*'t\\s+", "(?i)\\s*'ve\\s+","(?i)\\s*'ll\\s+"};
+
+    static String[] strReplace = {"", "", "let us", " is ", " am ", " are ", " not ", " have ", " will "};
+
+	@Override public String replaceS(String s) {
+		for (int i = 0; i < regex.length; i++)
+			s = s.replaceAll(regex[i], strReplace[i]);
+		return s;
+	}
 }
 

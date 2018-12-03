@@ -13,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
 
 /** Example usages of {@link Word2VecModel} */
@@ -26,23 +27,49 @@ public class QaACheck {
         loadModel();
     }
 
-
     private static void interact(Searcher searcher) throws IOException, Searcher.UnknownWordException {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
-            Document doc = ReadFileXml.readFileXml("pure_manner.xml");
+            System.out.print("Enter word or sentence (EXIT to break):\n");
+            String sen1 = br.readLine();
+            System.out.println("Searching...");
+            Document doc = ReadFileXml.readFileXml("q&aDataSet.xml");
             NodeList nList = doc.getElementsByTagName("document");
-            Node nNode = nList.item(0);
-            Element eElement = (Element) nNode;
+            double max = 0;
+            int tag = 0;
+            List<Integer> count = null;
+            List<Double> test = null;
+            String str = sen1;
+            for (int i = 0; i < nList.getLength(); i++) {
+                Node nNode = nList.item(i);
+                Element eElement = (Element) nNode;
 
-            System.out.println("*"+eElement.getElementsByTagName("subject").item(0).getTextContent());
-            System.out.println("*"+eElement.getElementsByTagName("content").item(0).getTextContent());
-            System.out.println("-----");
-
-            double test1 = searcher.cosineQuesAns(eElement.getElementsByTagName("subject").item(0).getTextContent().toLowerCase()
-                    ,eElement.getElementsByTagName("" + "bestanswer").item(0).getTextContent().toLowerCase());
-            double test0 = searcher.cosineQuesAns(eElement.getElementsByTagName("subject").item(0).getTextContent().toLowerCase()
-                    ,eElement.getElementsByTagName("" + "answer_item").item(1).getTextContent().toLowerCase());
-            System.out.println(test1+"\n"+test0);
+//                System.out.println("*" + eElement.getElementsByTagName("subject").item(0).getTextContent());
+//                System.out.println("*" + eElement.getElementsByTagName("content").item(0).getTextContent());
+//                System.out.println("-----");
+                double test2 = searcher.cosDisSentences(str,eElement
+                        .getElementsByTagName("subject").item(0).getTextContent());
+                if(max<test2){
+                    max = test2;
+                    tag = i;
+                }
+//                if(max == test2){
+//                    count.add(i);
+//                    test.add(test2);
+//                }
+//                double test1 = searcher.cosineQuesAns(eElement.getElementsByTagName("subject").item(0).getTextContent().toLowerCase()
+//                        , eElement.getElementsByTagName("bestanswer").item(0).getTextContent().toLowerCase());
+//                double test0 = searcher.cosineQuesAns(eElement.getElementsByTagName("subject").item(0).getTextContent().toLowerCase()
+//                        , eElement.getElementsByTagName("answer_item").item(1).getTextContent().toLowerCase());
+//                System.out.println(test2);
+            }
+//            System.out.println(tag);
+//            for(int i=0;i<count.size();i++) {
+//                if(max == test.get(i))
+//                    System.out.println(((Element) nList.item(count.get(i))).getElementsByTagName("subject").item(0)
+//                            .getTextContent());
+//            }
+            System.out.println(((Element) nList.item(tag)).getElementsByTagName("subject").item(0).getTextContent());
+            System.out.println(((Element) nList.item(tag)).getElementsByTagName("bestanswer").item(0).getTextContent());
         }
     }
 
