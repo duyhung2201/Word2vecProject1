@@ -5,8 +5,7 @@ import com.medallia.word2vec.util.*;
 import org.apache.commons.logging.Log;
 import org.apache.thrift.TException;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
+
 import org.w3c.dom.NodeList;
 
 import java.io.BufferedReader;
@@ -19,22 +18,26 @@ import java.util.List;
 
 /** Example usages of {@link Word2VecModel} */
 public class QaACheck {
-    private static final Log LOG = AutoLog.getLog();
-
+    private final Log LOG = AutoLog.getLog();
+    Document subj_doc = ReadFileXml.readFileXml("subj_store.xml");
+    Document full_doc = ReadFileXml.readFileXml("bestAns_store.xml");
+    NodeList nList_sub = subj_doc.getElementsByTagName("subject");
+    NodeList nList_bAns = full_doc.getElementsByTagName("bestanswer");
+    Word2VecModel model;
     /**
      * Runs the example
      */
     public static void main(String[] args) throws IOException, TException, Searcher.UnknownWordException, InterruptedException {
-        loadModel();
+        QaACheck run = new QaACheck();
+        run.loadModel(); //loadModel
+        run.interact(run.model.forSearch()); //thuc thi ham search
     }
 
-    private static void interact(Searcher searcher) throws IOException, Searcher.UnknownWordException {
+    private void interact(Searcher searcher) throws IOException, Searcher.UnknownWordException {
+
         try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
 
-            Document subj_doc = ReadFileXml.readFileXml("subj_store.xml");
-            Document full_doc = ReadFileXml.readFileXml("bestAns_store.xml");
-            NodeList nList_sub = subj_doc.getElementsByTagName("subject");
-            NodeList nList_bAns = full_doc.getElementsByTagName("bestanswer");
+
 
             for (; ; ) {
                 System.out.print("Enter word or sentence (EXIT to break):\n");
@@ -72,14 +75,13 @@ public class QaACheck {
         }
     }
 
-    public static void loadModel() throws IOException, TException, Searcher.UnknownWordException {
-        final Word2VecModel model;
+    public void loadModel() throws IOException, TException, Searcher.UnknownWordException {
+
         try (ProfilingTimer timer = ProfilingTimer.create(LOG, "Loading model")) {
             String json = Common.readFileToString(new File("text8CBOW.model"));
             model = Word2VecModel.fromThrift(ThriftUtils.deserializeJson(new Word2VecModelThrift(), json));
         }
         System.out.println(" Loaded model");
-        interact(model.forSearch());
     }
 
 
