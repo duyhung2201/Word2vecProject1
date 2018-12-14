@@ -27,12 +27,16 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.medallia.word2vec.RunModel.modelAvai;
+
+
 /** Example usages of {@link Word2VecModel} */
 public class Word2VecExamples {
 	private static final Log LOG = AutoLog.getLog();
-	
-	/** Runs the example */
-	public static void main(String[]args) throws IOException, TException, UnknownWordException, InterruptedException {
+	int[] a;
+
+    /** Runs the example */
+	public static void main(String[] args) throws IOException, TException, UnknownWordException {
 //		demoWord();
 //		skipGram();
 		loadModel();
@@ -130,7 +134,7 @@ public class Word2VecExamples {
 		interact(model.forSearch());
 	}
 	
-	private static void interact(Searcher searcher) throws IOException, UnknownWordException {
+	private static void interact(Searcher searcher) throws IOException {
 		try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
 			for(;;) {
                 System.out.print("Enter word or sentence (EXIT to break):\n");
@@ -140,10 +144,14 @@ public class Word2VecExamples {
                 }
                 String word2 = br.readLine();
                 try {
-//                    List<Match> matches = searcher.getMatches(word, 20);
- 					System.out.println(searcher.contains(word1));
-					System.out.println(searcher.cosineDistance(word1,word2));
+//                    List<Match> matches = searcher.getMatches(word1, 10);
+//                    System.out.println(Strings.joinObjects("\n", matches));
+// 					System.out.println(searcher.contains(word1));
 //					System.out.println(searcher.getVector(word1));
+//					System.out.println(searcher.getRawVector(word1));
+//					System.out.println(searcher.getMatches(word1,10));
+//					System.out.println(searcher.getVector(word1));
+					System.out.println(searcher.cosDisSentences(word1,word2));
                 } catch (Exception e) {
                     System.out.println(e);
                     System.out.println("Nhập lại đi ! 😀");

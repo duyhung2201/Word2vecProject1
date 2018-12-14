@@ -24,9 +24,9 @@ public interface Searcher {
 	String[] splitStr(String s);
 
 	//tinh do tg dong giua ques-ans
-	double cosineQuesAns(String ques, String ans) throws UnknownWordException;
+	double cosineQuesAns(String ques, String ans);
 
-    double cosDisSentences(String s1, String s2) throws UnknownWordException;
+    double cosDisSentences(String s1, String s2);
 
 	String replaceS(String s);
 
@@ -40,7 +40,7 @@ public interface Searcher {
 	SemanticDifference similarity(String s1, String s2) throws UnknownWordException;
 
 	/** @return cosine similarity between two words. */
-	double cosineDistance(String s1, String s2) throws UnknownWordException;
+	double cosineDistance(String s1, String s2) ;
 
 	double[] getVector(String word) throws UnknownWordException;
 	/** Represents a match to a search word */

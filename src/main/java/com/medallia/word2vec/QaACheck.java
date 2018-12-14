@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/** Example usages of {@link Word2VecModel} */
 public class QaACheck {
     private final Log LOG = AutoLog.getLog();
     Document subj_doc = ReadFileXml.readFileXml("subj_store.xml");
@@ -36,8 +35,6 @@ public class QaACheck {
     private void interact(Searcher searcher) throws IOException, Searcher.UnknownWordException {
 
         try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
-
-
 
             for (; ; ) {
                 System.out.print("Enter word or sentence (EXIT to break):\n");
@@ -64,13 +61,13 @@ public class QaACheck {
                 for (int i = count.size() - 1; i >= 0; i--) {
                     if (max == equal_sim.get(i)) {
                         String nQues = nList_sub.item(count.get(i)).getTextContent();
-                        System.out.println("* " + nQues );
-                        System.out.println("->"+ nList_bAns.item(count.get(i)).getTextContent());
+                        System.out.println("+) Question:   " + nQues );
+                        System.out.println("Answer:\n" + nList_bAns.item(count.get(i)).getTextContent());
                     } else break;
                 }
                 String nQues = ( nList_sub.item(tag).getTextContent());
-                System.out.println("* " + nQues );
-                System.out.println("->" + nList_bAns.item(tag).getTextContent());
+                System.out.println("+) Question: " + nQues );
+                System.out.println("Answer:\n" + nList_bAns.item(tag).getTextContent());
             }
         }
     }

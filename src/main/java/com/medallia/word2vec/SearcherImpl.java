@@ -34,14 +34,19 @@ class SearcherImpl implements Searcher {
 		this(NormalizedWord2VecModel.fromWord2VecModel(model));
 	}
 
-	@Override
+	@Override //dua ra vecto tu
 	public List<Match> getMatches(String s, int maxNumMatches) throws UnknownWordException {
 		return getMatches(getVector(s), maxNumMatches);
 	}
 
 	@Override
-	public double cosineDistance(String s1, String s2) throws UnknownWordException {
-		return calculateDistance(getVector(s1), getVector(s2));
+	public double cosineDistance(String s1, String s2){
+		try {
+			return calculateDistance(getVector(s1), getVector(s2));
+		} catch (UnknownWordException e) {
+			e.printStackTrace();
+			return 0;
+		}
 	}
 
 	@Override
@@ -183,16 +188,16 @@ class SearcherImpl implements Searcher {
 
 	//tinh do tg dong giua ques-ans
     @Override
-    public double cosineQuesAns(String ques, String ans) throws UnknownWordException {
+    public double cosineQuesAns(String ques, String ans) {
         double sumMax = 0;
-        String[] q = this.splitStr(ques.toLowerCase());
-        String[] a = this.splitStr(ans.toLowerCase());
+        String[] q = this.splitStr(ques);
+        String[] a = this.splitStr(ans);
         int len = a.length;
-        for (String aj : a) {
+        for (String aj: a) {
             double max = 0;
             if(this.checkValidDouble(aj)) {
 //                System.out.println("double " + aj);
-                for (String qi : q)
+                for (String qi: q)
                     max = (this.checkValidDouble(qi) && max < this.cosineDouble(aj, qi))
                             ? this.cosineDouble(aj, qi) : max;
 //                {
@@ -202,7 +207,7 @@ class SearcherImpl implements Searcher {
             }
             else if (this.contains(aj)) {
                 for (String qi : q) {
-                    if (!this.checkValidDouble(qi) && this.contains(qi)) {
+                    if (this.contains(qi)) {
                         double d = this.cosineDistance(aj, qi);
 //                        System.out.println(aj + "-" + qi + "=" + d);
                         max = (max < d) ? d : max;
@@ -219,7 +224,11 @@ class SearcherImpl implements Searcher {
         return sumMax / len;
     }
 
-    @Override public double cosDisSentences(String s1, String s2) throws UnknownWordException {
+
+    //tinh do tuong dong giua 2 cau
+    @Override public double cosDisSentences(String s1, String s2) {
+		s1 = s1.toLowerCase();
+		s2 = s2.toLowerCase();
 		return (cosineQuesAns(s1,s2)+cosineQuesAns(s2,s1))/2;
 	}
 
